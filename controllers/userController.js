@@ -78,7 +78,7 @@ const updateUserPassword = async (req, res) => {
 
 	const foundUser = await Users.findOne({ _id: UserId })
 	if (!foundUser) {
-		throw new NotFoundError(`couldnt find a user with id = ${UserId}`)
+		throw new NotFoundError(`couldn't find a user with id = ${UserId}`)
 	}
 
 	const isOldMatch = await foundUser.comparePasswords(oldPassword)
