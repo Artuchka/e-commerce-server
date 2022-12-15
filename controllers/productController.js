@@ -1,13 +1,14 @@
 const { StatusCodes } = require("http-status-codes")
 const { default: mongoose } = require("mongoose")
-const { NotFoundError } = require("../error/customError")
+const { NotFoundError, BadRequestError } = require("../error/customError")
 const { Products } = require("../models/ProductModel")
+const path = require("path")
 
 const createProduct = async (req, res) => {
 	req.body.user = req.user.UserId
 	const createdProduct = await Products.create(req.body)
 
-	res.status(StatusCodes.OK).json({
+	res.status(StatusCodes.CREATED).json({
 		msg: "created product",
 		product: createdProduct,
 	})
@@ -70,7 +71,15 @@ const deleteProduct = async (req, res) => {
 }
 
 const uploadImage = async (req, res) => {
-	res.status(StatusCodes.OK).json({
+	const image = req?.files?.image
+	console.log(image)
+	if (!image || !image.mimetype.match(/image\//)) {
+		throw new BadRequestError(`please provide image`)
+	}
+	image.mv(path.join(__dirname, "../uploads/", image.name), (err) => {
+		console.log(err)
+	})
+	res.status(StatusCodes.CREATED).json({
 		msg: "uploadImage",
 	})
 }

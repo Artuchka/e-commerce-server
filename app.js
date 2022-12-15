@@ -1,5 +1,6 @@
 const express = require("express")
 require("express-async-errors")
+const fileUpload = require("express-fileupload")
 
 const { connectDB } = require("./database/connect")
 const { errorHandlerMiddleware } = require("./middleware/error-handler")
@@ -20,6 +21,7 @@ app.use(morgan("tiny"))
 app.use(cookieParser(process.env.JWT_SECRET))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
+app.use(fileUpload())
 
 app.get("/", (req, res) => {
 	res.status(200).send(`
