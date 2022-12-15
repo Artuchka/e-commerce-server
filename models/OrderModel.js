@@ -28,31 +28,36 @@ const OrderSchema = new mongoose.Schema(
 		tax: {
 			type: Number,
 			required: [true, "please provide tax"],
+			default: 0,
 		},
 		shippingFee: {
 			type: Number,
 			required: [true, "please provide shippingFee"],
+			default: 0,
 		},
 		subtotal: {
 			type: Number,
 			required: [true, "please provide subtotal"],
+			default: 0,
 		},
 		total: {
 			type: Number,
 			required: [true, "please provide total"],
+			default: 0,
 		},
 		orderItems: {
 			type: [SingleCartSchema],
 			required: [true, "please provide order items"],
+			default: [],
 		},
 		status: {
 			type: String,
 			required: [true, "please provide order items"],
 			enum: {
 				values: ["pending", "failed", "paid", "delivered", "canceled"],
-				default: "pending",
 				message: "{VALUE} is not supported for status",
 			},
+			default: "pending",
 		},
 		user: {
 			type: mongoose.Types.ObjectId,
@@ -61,6 +66,7 @@ const OrderSchema = new mongoose.Schema(
 		},
 		clientSecret: {
 			type: String,
+			default: "placeholder",
 			required: [true, "please provide clientSecret who makes the order"],
 		},
 		paymentId: {
