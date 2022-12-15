@@ -1,5 +1,6 @@
 const { StatusCodes } = require("http-status-codes")
 const { default: mongoose } = require("mongoose")
+const { NotFoundError } = require("../error/customError")
 const { Products } = require("../models/ProductModel")
 
 const createProduct = async (req, res) => {
@@ -22,20 +23,49 @@ const getAllProducts = async (req, res) => {
 }
 
 const getSingleProduct = async (req, res) => {
+	const { id } = req.params
+	const foundProduct = await Products.findById(mongoose.Types.ObjectId(id))
+	if (!foundProduct) {
+		throw new NotFoundError(`couldnt find the product with id=${id}`)
+	}
+
 	res.status(StatusCodes.OK).json({
 		msg: "getSingleProduct product",
+		product: foundProduct,
 	})
 }
 
 const updateProduct = async (req, res) => {
+	const { id } = req.params
+	const foundProduct = await Products.findById(mongoose.Types.ObjectId(id))
+	if (!foundProduct) {
+		throw new NotFoundError(`couldnt find the product with id=${id}`)
+	}
+
+	Object.keys(req.body).forEach((key) => {
+		foundProduct[key] = req.body[key]
+	})
+	await foundProduct.save()
+
 	res.status(StatusCodes.OK).json({
 		msg: "updateProduct product",
+		product: foundProduct,
 	})
 }
 
 const deleteProduct = async (req, res) => {
+	const { id } = req.params
+	const foundProduct = await Products.findByIdAndDelete(
+		mongoose.Types.ObjectId(id)
+	)
+	if (!foundProduct) {
+		throw new NotFoundError(`couldnt find the product with id=${id}`)
+	}
+
+	foundProduct.delete()
 	res.status(StatusCodes.OK).json({
-		msg: "updateProduct product",
+		msg: "deleted product",
+		product: foundProduct,
 	})
 }
 
