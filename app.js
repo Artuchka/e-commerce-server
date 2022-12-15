@@ -1,8 +1,8 @@
-// const cors = require("cors")
-// const rateLimiter = require("express-rate-limit")
-// const helmet = require("helmet")
-// const mongoSanitize = require("express-mongo-sanitize")
-// const xss = require("xss-clean")
+const cors = require("cors")
+const rateLimiter = require("express-rate-limit")
+const helmet = require("helmet")
+const mongoSanitize = require("express-mongo-sanitize")
+const xss = require("xss-clean")
 
 const express = require("express")
 require("express-async-errors")
@@ -14,18 +14,18 @@ const { notFound } = require("./middleware/notFound")
 require("dotenv").config()
 const app = express()
 const cookieParser = require("cookie-parser")
-// app.set("proxy", 1)
-// app.use(
-// 	rateLimiter({
-// 		windowMs: 15 * 60 * 1000,
-// 		max: 60,
-// 	})
-// )
+app.set("proxy", 1)
+app.use(
+	rateLimiter({
+		windowMs: 15 * 60 * 1000,
+		max: 60,
+	})
+)
 
-// app.use(helmet())
-// app.use(cors())
-// app.use(xss())
-// app.use(mongoSanitize())
+app.use(helmet())
+app.use(cors())
+app.use(xss())
+app.use(mongoSanitize())
 
 const morgan = require("morgan")
 const { authRouter } = require("./routers/authRouter")
