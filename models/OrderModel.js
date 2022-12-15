@@ -18,7 +18,7 @@ const SingleCartSchema = new mongoose.Schema({
 	},
 	product: {
 		type: mongoose.Types.ObjectId,
-		required: [true, "please provide user who makes the order"],
+		required: [true, "please provide product who makes the order"],
 		ref: "Product",
 	},
 })
