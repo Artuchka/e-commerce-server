@@ -2,6 +2,7 @@ const { StatusCodes } = require("http-status-codes")
 const { default: mongoose } = require("mongoose")
 const { NotFoundError, BadRequestError } = require("../error/customError")
 const { Users } = require("../models/UserModel")
+const { checkPermission } = require("../utils/checkPermission")
 const { attachCookieToResponse } = require("../utils/cookie")
 const { createTokenUser } = require("../utils/token")
 
@@ -14,12 +15,15 @@ const getAllUsers = async (req, res) => {
 }
 const getSingleUser = async (req, res) => {
 	const { id } = req.params
+
 	const foundUser = await Users.findOne({
 		_id: new mongoose.Types.ObjectId(id),
 	}).select("-password")
 	if (!foundUser) {
 		throw new NotFoundError(`couldnt find a user with id = ${id}`)
 	}
+
+	checkPermission(req.user, foundUser._id)
 
 	res.status(StatusCodes.OK).json({
 		user: foundUser,
