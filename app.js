@@ -22,6 +22,7 @@ app.use(cookieParser(process.env.JWT_SECRET))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(fileUpload())
+app.use(express.static("./public"))
 
 app.get("/", (req, res) => {
 	res.status(200).send(`

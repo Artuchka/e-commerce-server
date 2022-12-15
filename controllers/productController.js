@@ -42,7 +42,6 @@ const updateProduct = async (req, res) => {
 	if (!foundProduct) {
 		throw new NotFoundError(`couldnt find the product with id=${id}`)
 	}
-
 	Object.keys(req.body).forEach((key) => {
 		foundProduct[key] = req.body[key]
 	})
@@ -56,14 +55,13 @@ const updateProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
 	const { id } = req.params
-	const foundProduct = await Products.findByIdAndDelete(
-		mongoose.Types.ObjectId(id)
-	)
+	const foundProduct = await Products.findById(mongoose.Types.ObjectId(id))
 	if (!foundProduct) {
 		throw new NotFoundError(`couldnt find the product with id=${id}`)
 	}
 
-	foundProduct.delete()
+	await foundProduct.remove()
+
 	res.status(StatusCodes.OK).json({
 		msg: "deleted product",
 		product: foundProduct,
@@ -76,11 +74,12 @@ const uploadImage = async (req, res) => {
 	if (!image || !image.mimetype.match(/image\//)) {
 		throw new BadRequestError(`please provide image`)
 	}
-	image.mv(path.join(__dirname, "../uploads/", image.name), (err) => {
+	await image.mv(path.join(__dirname, "../uploads/", image.name), (err) => {
 		console.log(err)
 	})
 	res.status(StatusCodes.CREATED).json({
 		msg: "uploadImage",
+		src: `/uploads/${image.name}`,
 	})
 }
 
