@@ -25,7 +25,10 @@ const getAllProducts = async (req, res) => {
 
 const getSingleProduct = async (req, res) => {
 	const { id } = req.params
-	const foundProduct = await Products.findById(mongoose.Types.ObjectId(id))
+	const foundProduct = await Products.findById(
+		mongoose.Types.ObjectId(id)
+	).populate({ path: "reviews", select: "rating comment title user" })
+
 	if (!foundProduct) {
 		throw new NotFoundError(`couldnt find the product with id=${id}`)
 	}
