@@ -23,6 +23,7 @@ const ProductSchema = new mongoose.Schema(
 			type: String,
 			required: [true, "please provide image"],
 			trim: true,
+			default: "/uploads/default.jpeg",
 		},
 		category: {
 			type: String,

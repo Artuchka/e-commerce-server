@@ -1,14 +1,23 @@
 const { StatusCodes } = require("http-status-codes")
+const { default: mongoose } = require("mongoose")
+const { Products } = require("../models/ProductModel")
 
 const createProduct = async (req, res) => {
+	req.body.user = req.user.UserId
+	const createdProduct = await Products.create(req.body)
+
 	res.status(StatusCodes.OK).json({
 		msg: "created product",
+		product: createdProduct,
 	})
 }
 
 const getAllProducts = async (req, res) => {
+	const products = await Products.find({})
+
 	res.status(StatusCodes.OK).json({
 		msg: "getAllProducts product",
+		products,
 	})
 }
 
