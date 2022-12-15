@@ -7,6 +7,7 @@ const {
 	deleteProduct,
 	uploadImage,
 } = require("../controllers/productController")
+const { getSingleProductReviews } = require("../controllers/reviewController")
 const { roleMiddleware } = require("../middleware/authMiddleware")
 const router = express.Router()
 
@@ -22,5 +23,7 @@ router
 	.get(getSingleProduct)
 	.patch(roleMiddleware("admin"), updateProduct)
 	.delete(roleMiddleware("admin"), deleteProduct)
+
+router.route("/:id/reviews").get(getSingleProductReviews)
 
 module.exports = { productRouter: router }

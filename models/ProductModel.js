@@ -63,6 +63,11 @@ const ProductSchema = new mongoose.Schema(
 			required: [true, "please provide averageRating"],
 			default: 0,
 		},
+		numOfReviews: {
+			type: Number,
+			required: [true, "please provide averageRating"],
+			default: 0,
+		},
 		user: {
 			type: mongoose.Types.ObjectId,
 			ref: "User",
@@ -81,6 +86,14 @@ ProductSchema.virtual("reviews", {
 	localField: "_id",
 	foreignField: "product",
 	justone: false,
+})
+
+ProductSchema.pre("remove", async function (next) {
+	console.log("removing")
+	await this.model("Review").deleteMany({
+		product: this._id,
+	})
+	next()
 })
 
 const Products = new mongoose.model("Product", ProductSchema)

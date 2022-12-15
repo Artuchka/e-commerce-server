@@ -34,9 +34,12 @@ const getSingleReview = async (req, res) => {
 	}
 	const foundReview = await Reviews.findOne({
 		_id: mongoose.Types.ObjectId(reviewId),
+		product: mongoose.Types.ObjectId(productId),
 	})
 	if (!foundReview) {
-		throw new NotFoundError(`no review with id = ${reviewId}`)
+		throw new NotFoundError(
+			`no review with id = ${reviewId} from product id=${productId}`
+		)
 	}
 	res.status(StatusCodes.OK).json({
 		msg: "single review",
@@ -82,9 +85,12 @@ const updateReview = async (req, res) => {
 	}
 	const foundReview = await Reviews.findOne({
 		_id: mongoose.Types.ObjectId(reviewId),
+		product: mongoose.Types.ObjectId(productId),
 	})
 	if (!foundReview) {
-		throw new NotFoundError(`couldnt find a review with id = ${reviewId}`)
+		throw new NotFoundError(
+			`couldnt find a review with id = ${reviewId} \\w prodId =${productId}`
+		)
 	}
 
 	checkPermission(req.user, foundReview.user)
@@ -126,10 +132,21 @@ const deleteReview = async (req, res) => {
 	})
 }
 
+const getSingleProductReviews = async (req, res) => {
+	const { id: productId } = req.params
+
+	const reviews = await Reviews.find({
+		product: mongoose.Types.ObjectId(productId),
+	})
+
+	res.status(StatusCodes.OK).json({ reviews })
+}
+
 module.exports = {
 	getAllReviews,
 	updateReview,
 	deleteReview,
 	createReview,
 	getSingleReview,
+	getSingleProductReviews,
 }
