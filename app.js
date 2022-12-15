@@ -15,6 +15,7 @@ const { userRouter } = require("./routers/userRouter")
 const { authMiddleware } = require("./middleware/authMiddleware")
 const { productRouter } = require("./routers/productRouter")
 const { reviewRouter } = require("./routers/reviewRouter")
+const { orderRouter } = require("./routers/orderRouter")
 
 const port = process.env.PORT || 3000
 
@@ -42,6 +43,7 @@ app.use("/api/v1/auth", authRouter)
 app.use("/api/v1/users", authMiddleware, userRouter)
 app.use("/api/v1/products", authMiddleware, productRouter)
 app.use("/api/v1/reviews", authMiddleware, reviewRouter)
+app.use("/api/v1/orders", authMiddleware, orderRouter)
 
 app.use(notFound)
 app.use(errorHandlerMiddleware)
